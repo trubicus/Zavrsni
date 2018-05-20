@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Arch Linux) (preloaded format=pdflatex 2018.3.23)  23 MAR 2018 13:16
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Arch Linux) (preloaded format=pdflatex 2018.3.23)  20 MAY 2018 19:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -566,22 +566,30 @@ Package: booktabs 2016/04/27 v1.618033 publication quality tables
 \@thisruleclass=\count110
 \@lastruleclass=\count111
 \@thisrulewidth=\dimen144
+)
+(/usr/share/texmf-dist/tex/latex/tools/array.sty
+Package: array 2016/10/06 v2.4d Tabular extension package (FMi)
+\col@sep=\dimen145
+\extrarowheight=\dimen146
+\NC@list=\toks25
+\extratabsurround=\skip49
+\backup@length=\skip50
 ) (./zavrsni.aux)
 \openout1 = `zavrsni.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Try loading font information for T1+ptm on input line 4.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 7.
 
 (/usr/share/texmf-dist/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
@@ -623,16 +631,16 @@ File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count112
-\scratchdimen=\dimen145
+\scratchdimen=\dimen147
 \scratchbox=\box29
 \nofMPsegments=\count113
 \nofMParguments=\count114
-\everyMPshowfont=\toks25
+\everyMPshowfont=\toks26
 \MPscratchCnt=\count115
-\MPscratchDim=\dimen146
+\MPscratchDim=\dimen148
 \MPnumerator=\count116
 \makeMPintoPDFobject=\count117
-\everyMPtoPDFconversion=\toks26
+\everyMPtoPDFconversion=\toks27
 ) (/usr/share/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 
@@ -687,32 +695,32 @@ e
 ))
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for T1+phv on input line 15.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 18.
 
 (/usr/share/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 15.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 18.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 15.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 18.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 15.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 18.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 15.
-LaTeX Font Info:    Try loading font information for U+msa on input line 15.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 18.
+LaTeX Font Info:    Try loading font information for U+msa on input line 18.
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 15.
+LaTeX Font Info:    Try loading font information for U+msb on input line 18.
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 18.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 21.
  (/usr/share/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
@@ -720,7 +728,7 @@ File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 2.
 
-Overfull \hbox (2.34383pt too wide) in paragraph at lines 4--4
+Overfull \hbox (2.34383pt too wide) in paragraph at lines 8--8
  [] []\T1/ptm/b/n/12 Usporedba dru-gih ra-zvoj-nih mo-dula koji ko-riste WiFi k
 o-mu-ni-ka-cij-ski pro- 
  []
@@ -737,40 +745,46 @@ Poglavlje 1.
 
 ]
 Poglavlje 2.
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <17.28> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 38.
+<./img/esp8266.jpg, id=25, 401.5pt x 401.5pt>
+File: ./img/esp8266.jpg Graphic file (type jpg)
+<use ./img/esp8266.jpg>
+Package pdftex.def Info: ./img/esp8266.jpg  used on input line 46.
+(pdftex.def)             Requested size: 200.7495pt x 200.7495pt.
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 47.
 [2
 
-]
+ <./img/esp8266.jpg>] [3] [4]
 Poglavlje 3.
-[3
+[5
 
 ]
 Poglavlje 4.
-[4
-
-]
-Poglavlje 5.
 No file zavrsni.bbl.
-[5
+[6
 
-] [6] (./zavrsni.aux) ) 
+] [7] (./zavrsni.aux) ) 
 Here is how much of TeX's memory you used:
- 5950 strings out of 492982
- 81226 string characters out of 6138579
- 156143 words of memory out of 5000000
- 9384 multiletter control sequences out of 15000+600000
- 42229 words of font info for 51 fonts, out of 8000000 for 9000
+ 6039 strings out of 492982
+ 82306 string characters out of 6138579
+ 159854 words of memory out of 5000000
+ 9455 multiletter control sequences out of 15000+600000
+ 60532 words of font info for 78 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 43i,6n,40p,274b,194s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,6n,40p,367b,352s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr
 /share/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/share/texmf-dist/fo
 nts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/helvet
 ic/uhvr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/sha
 re/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-dist/fonts/typ
-e1/urw/times/utmr8a.pfb>
-Output written on zavrsni.pdf (10 pages, 65709 bytes).
+e1/urw/times/utmr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmri8a.pf
+b>
+Output written on zavrsni.pdf (11 pages, 107008 bytes).
 PDF statistics:
- 62 PDF objects out of 1000 (max. 8388607)
- 43 compressed objects within 1 object stream
+ 70 PDF objects out of 1000 (max. 8388607)
+ 48 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
