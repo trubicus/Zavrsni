@@ -93,8 +93,58 @@ Usporedba raznih arduina i slicnih mikrokontrolera koji se mogu spojiti na WiFi.
 \section{Message Queuing Telemetry Transport - \textbf{MQTT}}
 MQTT je protokol široko primjenjen u \textit{IoT} sustavima temeljen na prijenosu poruka u režimu pretplate i objave.
 Prijenos poruka se vrši preko TCP/IP protokola te se za to brine program na poslužitelju koji ima ulogu brokera.
+Pretplata i objava se vrše na temelju teme (eng. \textit{topic}) gdje uređaji MQTT brokeru šalju poruke koje taj broker ovisno o temi šalje drugim uređajima koji su na tu temu pretplačeni.
+Prava moć MQTT protokola su teme koje zamjenjuju MAC i IP adrese uređaja kako bi postavljanje infrastrukture postalo vrlo trivijalno i lagano za implementirati.
+Tema je oblika \textit{"ovo/je/primjer/teme"} gdje je svaka razina teme odvojena separatorom \textit{"/"}.
+Tema može imati bilokoliko razina te se one mogu adresirati pomoću zamjenskih znakova:
+\begin{itemize}
+    \item '+' - predstavlja jednu razinu u temi. Npr. tema \textit{"mojdom/prizemlje/+/temperatura"} će prikazivati sve poruke na temama \textit{"mojdom/prizemlje/kuhinja/temperatura"} te \textit{"mojdom/prizemlje/dnevnasoba/temperatura"}.
+    \item '\#' - predstavlja više razina u temi. Npr. tema \textit{"mojdom/prizemlje/\#"} će prikazivati sve teme koje su podskup ove teme.
+\end{itemize}
+Ovakva struktura tema je vrlo pregledna i čitka te se na taj način može vrlo dobro logički odjeliti svaki čvor unutar takve mreže što čini MQTT protokol vrlo pogodnim za \textit{IoT} primjenu.
+Svaki uređaj se nalazi na svojoj temi koja pobliže opisuje gdje se taj uređaj nalazi te pomoću teme možemo iščitati semantiku poslane poruke.
+Poseban početni znak koji se može naći u temi je znak dolara \textit{"\$"} koji predstavlja unutarnje statistike samog MQTT brokera.
+Na takve teme ne možemo objavljivati poruke a nisu ni podložne zamjenskim znakovima tako da ako se uređaj pretplati na temu \textit{"\#"} dobivat će sve poruke osim tih koje se nalaze na temama unutarnjih statistika.
+
+Poruke mogu biti i očuvane (eng. \textit{retained}) tako da se prilikom objavljivanja poruke postavi zastavica očuvanja što MQTT brokrer interpretira tako da na toj temi sprema zadnju objavljenu poruku.
+Tako očuvana poruka je objavljena svim novim uređajima koji se pretplačuju na tu temu u nekom kasnijem trenutku tako da ti uređaji dobivaju trenutne vrijednosti na takvim temama.
+Ta je opcija vrlo korisna kod objavljivanja podataka primjerice nekih senzora zato što takvi uređaji odmah imaju trenutne vrijednosti s kojima odmah mogu početi baratati umjesto da čekaju tek sljedeću objavu.
+
+MQTT klijent je bilokakav uređaj spojen na internet koji izvršava kod MQTT biblioteke te je spojeno na MQTT broker.
+Klijenti su implementirani već za gotovo sve platforme (npr. Arduino, iOS, Android) u raznim programskim jezicima (npr. Python, C, C++, C\#, Java).
+
+MQTT broker je program koji se izvršava na nekom poslužitelju te upravlja porukama i uređajima koji su na njega spojeni.
+Brine se o pravim MAC i IP adresama uređaja na mreži koje su mu potrebne za samu realizaciju izmjena poruka kako se korisnici ne bi time trebali zamarati.
+Također se brine i o autorizaciji uređaja na mreži tako da prava na pretplačivanje mogu biti implementirana pomoću korisničkih imena i lozinki kako bi se očuvala privatnost podataka i spriječile razne maliciozne aktivnosti.
+
 
 \section{Homie konvencija za MQTT protokol}
+Homie konvencija je konvencija nastala iz potrebe zajednice za standardiziranim načinom komunikacije između različitih \textit{IoT} uređaja koji koriste MQTT protokol.
+Njome se propisuje i implementira struktura tema i poruka kako bi se na temelju njih mogle implementirati pogodnosti kao što su praćenje verzija firmware-a, OTA (eng. \textit{Over The Air}) osvježavanja tog istog firmware-a, omogučuje automatsko otkrivanje uređaja na mreži te osigurava lakše poimanje mreže uređaja i struktura podataka.
+Nalaže da je uređaj fizička instanca sklopovlja koji može logički prestavljati više čvorova.
+Čvor je logički odvojen dio uređaja kao na primjer neki senzor temperature ili relej koji upravlja svjetlom.
+
+Jedan čvor može imati više svojstva koja ga pobliže označuju kao na primjer RGB Led dioda koja može imati svojstva \textit{intenzitet} i \textit{boja}.
+Svojstva mogu biti postavljiva ili ne postavljiva što čuva integritet tih svojstava tako da možemo objavljivanjem poruka mjenjati samo vrijednosti koje su promjenjive kao što su paljenje odnosno gašenje svjetla dok ne možemo mjenjati trenutnu temperaturu koju temperaturni senzor trenutno mjeri.
+Atributi pobliže označavaju uređaje, čvorove i svojstva.
+Oni se u temi označavaju sa početnim znakom "\$" i vrlo su bitni kod već spomenute implementacije automatskog otkrivanja uređaja i čvorova.
+
+Svaka tema u ovoj konvenciji ima korijen \textit{"Homie"} nakon čega ide identifikator uređaja što može biti neki tekst definiran od strane programera ili uobičajeno MAC adresa mrežnog adaptera.
+Svi atributi vezani uz uređaj slijede identifikatoru te počinju znakom "\$".
+To su razni podaci od kojih je bitno za napomenuti MAC adresa (\textit{\$mac}), lokalna IP adresa (\textit{\$localip}), čvorovi (\textit{\$nodes}), stanje uređaja (\textit{\$state}), statistika uređaja (\textit{\$stats}) te ime uređaja (\textit{\$name}).
+
+Nakon identifikatora uređaja slijedi identifikator čvora.
+Identifikator čvora je definiran od strane programera te mora biti jedinstven za taj uređaj.
+Atributi čvora su ime (\textit{\$name}), tip (\textit{\$type}) i svojstva (\textit{\$propertyes}) koji slijede identifikator čvora.
+
+Slijedi svojstvo čvora koje također mora biti jedinstveno unutar jednoga čvora.
+Atributi svojstva su ime (\textit{\$name}), postavljivost (\textit{\$settable}), mjerna jedinica (\textit{\$unit}), tip podataka (\textit{\$datatype}) te format (\textit{\$format}) koji opisuje opseg vrijednosti.
+
+Svaka poruka mora biti zapisana u string formatu radi konzistentnosti između uređaja.
+
+Primjer teme svjetla spojenog na relej na nekom uređaju po Homie konvenciji je:
+
+"\textit{Homie/ime-uređaja/ime-čvora/upaljeno-svjetlo}".
 
 \chapter{Programska podrška za praćenje komunikacije više modula ESP8266 na WiFi mreži}
 \section{Implementacija MQTT klijenta na ESP8266 pomoću Homie konvencije}
