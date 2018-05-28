@@ -6,6 +6,66 @@
 \usepackage{color}
 \graphicspath{ {./img/} }
 
+\definecolor{lightgray}{rgb}{0.95, 0.95, 0.95}
+\definecolor{darkgray}{rgb}{0.4, 0.4, 0.4}
+%\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\definecolor{editorGray}{rgb}{0.95, 0.95, 0.95}
+\definecolor{editorOcher}{rgb}{1, 0.5, 0} % #FF7F00 -> rgb(239, 169, 0)
+\definecolor{editorGreen}{rgb}{0, 0.5, 0} % #007C00 -> rgb(0, 124, 0)
+\definecolor{orange}{rgb}{1,0.45,0.13}		
+\definecolor{olive}{rgb}{0.17,0.59,0.20}
+\definecolor{brown}{rgb}{0.69,0.31,0.31}
+\definecolor{purple}{rgb}{0.38,0.18,0.81}
+\definecolor{lightblue}{rgb}{0.1,0.57,0.7}
+\definecolor{lightred}{rgb}{1,0.4,0.5}
+
+\lstdefinestyle{htmlcssjs} {%
+  % General design
+%  backgroundcolor=\color{editorGray},
+  basicstyle={\footnotesize\ttfamily},   
+  frame=b,
+  % line-numbers
+  xleftmargin={0.75cm},
+  numbers=left,
+  stepnumber=1,
+  firstnumber=1,
+  numberfirstline=true,	
+  % Code design
+  identifierstyle=\color{black},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{editorGreen}\bfseries,
+  stringstyle=\color{editorOcher}\ttfamily,
+  commentstyle=\color{brown}\ttfamily,
+  % Code
+  language=HTML5,
+  alsolanguage=JavaScript,
+  alsodigit={.:;},	
+  tabsize=2,
+  showtabs=false,
+  showspaces=false,
+  showstringspaces=false,
+  extendedchars=true,
+  breaklines=true,
+  % German umlauts
+  literate=%
+  {Ö}{{\"O}}1
+  {Ä}{{\"A}}1
+  {Ü}{{\"U}}1
+  {ß}{{\ss}}1
+  {ü}{{\"u}}1
+  {ä}{{\"a}}1
+  {ö}{{\"o}}1
+}
+
+% JavaScript
+\lstdefinelanguage{JavaScript}{
+  morekeywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  morecomment=[s]{/*}{*/},
+  morecomment=[l]//,
+  morestring=[b]",
+  morestring=[b]'
+}
+
 \begin{document}
 
 % TODO: Navedite broj rada.
@@ -241,7 +301,7 @@ setup(){
 Taj se programski kod treba nalaziti u \textit{setup} funkciji nakon postavljanja verzije firmware-a i prije funkcije za postavljanje Homie implementacije jer se prilikom tog postavljanja moraju navesti svi čvorovi koji se nalaze na tom uređaju.
 
 Čvor ledNode je trenutno pretplačen na temu \textit{Homie/DeviceID/ledNode/on}.
-Kad se na toj temi objavi poruka funkcija ledHandler je pozvana i ovisno o sadržaju poruke upravlja LED diodom.
+Kad je na toj temi objavljena poruka funkcija ledHandler je pozvana i ona ovisno o sadržaju poruke upravlja LED diodom.
 \begin{lstlisting}[language=C++]
 bool ledHandler(const HomieRange& range, const String& value){
    if(value == "ON"){
@@ -264,11 +324,233 @@ bool ledHandler(const HomieRange& range, const String& value){
 }
 \end{lstlisting}
 
-%dio o slanju JSON-a za konfiguraciju
+% Boot modeovi i kako se konfigurira
+Programiranje samog uređaja je pomoću Arduino SDK veoma trivijalno.
+U padajućem izborniku se odabire odgovarajuć uređaj te se prema tome postavljaju sve ostale postavke te pritiskom na gumb \textit{Upload} se kod prevede i prebacuje u memoriju uređaja.
+Pri tome na ESP8266 treba pin GPIO0 spojiti na logičku nulu kako bi prebacivanje programa bilo uspješno.
+
+Uređaj se kod prvog priključivanja nalazi u konfiguracijskom režimu rada.
+U takvom režimu se uređaj ponaša kao bežična pristupna točka lokalnoj mreži čije ime glasi \textit{Homie-xxxxxxxxxxxx} pri čemu je dio sa znakovima \textit{x} MAC adresa uređaja.
+Računalom se spaja na uređaj pri čemu je lozinka točno ta MAC adresa i uređaj tako može primiti konfiguracijsku datoteku u JSON formatu.
+Datoteka izgleda ovako:
+\begin{lstlisting}[language=JavaScript]
+{
+    "name": "Ledica",
+    "device-id": "ledica",
+    "wifi": {
+        "ssid": "<ime_mreze>",
+        "password": "<lozinka>"
+    },
+    "mqtt": {
+        "host": "<ip_adresa_MQTT_brokera>",
+        "port": 1883,
+        "base_topic": "devices/",
+        "auth": false
+    },
+    "ota": {
+        "enabled": true
+    }
+
+}
+\end{lstlisting}
+Funkcija postavki je:
+\begin{itemize}
+    \item name - Ime uređaja
+    \item device-id - Jedinstveno ime uređaja - MAC adresa ako ne iskoristimo ovu postavku
+    \item wifi - Ime i lozinka mreže na koju se uređaj spaja
+    \item mqtt - Postavke MQTT brokera, IP adresa, port, korijenska tema (umjesto homie/), te autorizacija
+    \item ota - Bežično reprogramiranje uređaja
+\end{itemize}
+
+U konfiguracijskom režimu rada uređaj izlaže funkcionalnosti JSON API-a preko kojeg možemo pozivati metode navedene u tablici~\ref{tab:api}
+% Tablica 2 {{{
+\begin{center}
+    \begin{table}[h]
+        \begin{tabular}{ |c|c|p{4cm}|p{4cm}| }
+            \hline
+            Metoda & Funkcija & Opis & Odgovori\\
+            \hline
+            GET & /heart & Provjera povezanosti sa uređajem & 204 No content \\
+            \hline
+            GET & /device-info & Informacije o uređaju & 200 OK + JSON datoteka\\
+            \hline
+            GET & /networks & Ispis svih vidljivih mreža & 200 OK, 503 Service Unavaliable \\
+            \hline
+            PUT & /config & Slanje konfuguracijske datoteke & 200 OK, 400 Bad Request, 403 Forbidden\\
+            \hline
+            GET & /wifi/connect & Povezivanje sa mrežom & 202 Accepted, 400 Bad Request\\
+            \hline
+            GET & /wifi/status & Ispis stanja veze & 200 OK + JSON datoteka\\
+            \hline
+            PUT & /proxy/control & Postavljanje funkcije posrednika & 200 OK, 400 Bad Request\\
+            \hline
+        \end{tabular}
+        \caption{API pozivi}
+        \label{tab:API}
+    \end{table}
+\end{center}
+% }}}
+Prema tome se JSON datoteka s postavkama se šalje na uređaj pomoću programa \textit{curl} koristeći /config funkciju naredbom:
+\begin{lstlisting}[language=Bash]
+curl -X PUT http://homie.config/config --header 'Content-Type: application/json' -d @config.json
+\end{lstlisting}
+
+nakon ćega uređaj vrača kod 200 OK i prelazi u normalan režim rada u kojemu izvršava kod iz memorije.
+LED indikator svojom brzinom paljenja i gašenja naznačuje stanje veze s mrežom i MQTT brokerom.
+Sporo paljenje i gašenje označava spajanje na mrežu dok brzo označava spajanje sa MQTT brokerom nakon čega se LED indikator gasi i uređaj nastavlja izvršavati svoj program.
+
+
 %}}}
 
+% Server {{{
 \section{Postavljanje poslužitelja}
+Uloga poslužitelja je pokretanje MQTT brokera i popratnih programa kao što su baza podataka, parser MQTT poruka i API.
+Poslužitelju se pristupa pomoću ssh protokola i njime se upravlja preko naredbene linije.
+
+SQLite baza podataka je vrlo lagana baza podataka koja koristi SQL sintaksu, ne zahtjeva posebne procese za rad i zapisuje promjene direktno u datoteku na disku.
+Uloga baze podataka je ta da zapisuje u sebi stanja svih čvorova svih uređaja u sustavu za nadziranje kako bismo pomoću API-a mogli pristupiti tim podacima.
+
+Platforma poslužitelja je raspian distribucija GNU/Linux operacijskog sustava jer je poslužitelj popularno malo računalo Raspberry PI.
+Baza podata se instalira pomoću naredbe:
+\begin{lstlisting}
+    \$ sudo apt-get install sqlite
+\end{lstlisting}
+koja uz pomoć upravljača paketima \textit{apt} instalira sustav za upravljanje bazama podataka zajedno sa svim programima o kojima taj sustav ovisi.
+
+Pokretanjem sustava za upravljanje bazom podataka se prikazuje naredbeni redak u koji upisom teksta SQL sintakse radimo novu
+bazu podataka.
+Struktura baze podataka je:
+\begin{table}[h]
+    \begin{tabular}{ |c|l| }
+        \hline
+        Ime & Opis \\
+        \hline
+        name & Ime uređaja\\
+        \hline
+        online & Status uređaja\\
+        \hline
+        localip & Lokalna IP adresa uređaja\\
+        \hline
+        mac & MAC adresa uređaja\\
+        \hline
+        homie & Verzija implementacije Homie konvencije\\
+        \hline
+        signal & Jačina bežičnog signala\\
+        \hline
+        uptime & Vrijeme rada uređaja\\
+        \hline
+        fwname & Ime trenutnog firmware-a\\
+        \hline
+        fwvesion & Verzija trenutnog firmware-a\\
+        \hline
+        implementation & ??\\
+        \hline
+        config & JSON konfiguracijska datoteka\\
+        \hline
+        ota\_enabled & Omogučenost OTA\\
+        \hline
+        ota\_status & Status OTA\\
+        \hline
+    \end{tabular}
+    \caption{Shema tablice mqtt}
+\end{table}
+
+
+\begin{table}[h]
+    \begin{tabular}{ |c|l| }
+        \hline
+        Ime & Opis\\
+        \hline
+        mac & MAC adresa uređaja\\
+        \hline
+        node & Ime čvora\\
+        \hline
+        type & Tip čvora\\
+        \hline
+        propertyes & Atributi čvora\\
+        \hline
+        node\_on & ??\\
+        \hline
+    \end{tabular}
+    \caption{Shema tablice node}
+\end{table}
+% }}}
+
+% Parser
 \section{Parser}
+Parser je program napisan u programskom jeziku Python te mu je zadaća primati MQTT poruke sa uređaja, parsirati te poruke i sadržaj spremati u bazu podataka.
+
+Za povezivanje na MQTT broker koristi se \textit{phao.mqtt.client} biblioteka.
+Instalacija te biblioteke se provodi uz pomoć programa \textit{pip} koji služi za instalaciju python paketa naredbom
+\begin{lstlisting}[language=Bash]
+    \$ pip -g install phao-mqtt
+\end{lstlisting}
+Opcija -g nalaže to da se taj paket instalira globalno na računalo a ne samo lokalno za taj projekt.
+
+Biblioteka se u kod uključuje linijom
+\begin{lstlisting}[language=Python]
+    import phao.mqtt.client as mqtt
+\end{lstlisting}
+čime smo postavili alias \textit{mqtt} te možemo koristiti njene funkcije samo koristeći taj alias.
+
+Povezivanje sa bazom podataka se vrši pomoću sqlite3 biblioteke koja se također instalira pomoću programa pip.
+
+U glavnome djelu programa se povezuje na bazu podataka koja se izrađuje ako ona ne postoji te se provjerava postojanje tablica.
+Zatim se spaja na MQTT broker i pokreće se beskonačna petlja koja čita poruke.
+\begin{lstlisting}[language=Python, caption=Main funkcija programskog koda]
+def main():
+    global database
+    database = sqlite3.connect("mqtt.db")
+    check_database(database)
+
+    client = mqtt.Client()
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.connect(host, port, keepalive)
+
+    client.loop_forever()
+\end{lstlisting}
+
+Funkcija za provjeru baze podataka služi tome da pri prvom pokretanju bude provjereno postojanje samih tablica te kreiranje ako one ne postoje.
+Ako pokušaj čitanja daje iznimku onda se stvaraju ispravne tablice čiji je kod zapisan u varijablama \textit{create_mqtt_sql} te \textit{create_node_sql}.
+\begin{lstlisting}[language=Python, caption=Funkcija za provjeru baze podataka]
+create_mqtt_sql = """
+                       create table mqtt(
+                       name text,
+                       online text,
+                       localip text,
+                       mac text primary key,
+                       homie text,
+                       signal text,
+                       uptime text,
+                       fwname text,
+                       fwversion text,
+                       implementation text,
+                       config text,
+                       ota_enabled text,
+                       ota_status text
+                       ); """
+create_node_sql = """
+                       create table node(
+                       mac text,
+                       node text,
+                       type text,
+                       properties text,
+                       node_on text
+                       );"""
+
+def check_database(base):
+    try:
+        cursor = base.cursor()
+        cursor.execute("select * from mqtt;")
+    except sqlite3.OperationalError:
+        cursor.execute(create_mqtt_sql)
+        cursor.execute(create_node_sql)
+        base.commit()
+\end{lstlisting}
+
+% }}}
+
 \section{API}
 
 \chapter{Zaključak}
