@@ -4,11 +4,12 @@
 \usepackage{array}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{float}
 \graphicspath{ {./img/} }
 
 \definecolor{lightgray}{rgb}{0.95, 0.95, 0.95}
 \definecolor{darkgray}{rgb}{0.4, 0.4, 0.4}
-%\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
 \definecolor{editorGray}{rgb}{0.95, 0.95, 0.95}
 \definecolor{editorOcher}{rgb}{1, 0.5, 0} % #FF7F00 -> rgb(239, 169, 0)
 \definecolor{editorGreen}{rgb}{0, 0.5, 0} % #007C00 -> rgb(0, 124, 0)
@@ -66,6 +67,7 @@
   morestring=[b]'
 }
 
+% pocetak {{{
 \begin{document}
 
 % TODO: Navedite broj rada.
@@ -86,6 +88,7 @@
 \zahvala{}
 
 \tableofcontents
+% }}}
 
 % Uvod {{{
 \chapter{Uvod}
@@ -131,6 +134,11 @@ Najbitnije sučelje prema vanjskome svijetu na ESP8266 su bežična mreža i 16 
 Mreža podržava IEEE 802.11 b/g/n protokol, P2P konfiguraciju te TCP/IP protokolni stog.
 GPIO pinovi se mogu zasebno programirati kao ulazi/izlazi, postaviti im \textit{pull-up/down} otpornike, te svaki ima ugrađen 10 bitni digitalno-analogni pretvornik tako da se svaki pin ponaša kao analogni izlaz.
 Ima također jedan analogan ulaz sa 10 bitnim analogno-digitalnim pretvornikom za spajanje raznih analognih senzora bez posebnih sučelja.
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.8]{ESP-Pin-Out.png}
+    \caption{Izvodi ESP8266}
+\end{figure}
 %}}}
 
 % Programiranje{{{
@@ -144,19 +152,29 @@ Nakon toga su se počeli javljat mnogi SDK-ovi ponajviše otvorenog koda zajedni
         \item PlatformIO - nova razina razvoja ugradbenih sustava sa posebnim IDE-om
         \item MicroPython - baziran na programskom jeziku python
     \end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{arduino.png}
+    \caption{Arduino razvojno okruženje}
+\end{figure}
+
+Zbog velike raširenosti Arduino mikrokontrolera je zajednica programera razvila SDK za Arduino razvojno sučelje.
+Cilj je bio približavanje ESP8266 modula amaterima te olakšanje razvoja firmware-a kroz poznatu sintaksu, poznato jednostavno razvojno okruženje te već postoječe biblioteke.
 %}}}
 
 %Usporedba {{{
 \section{Usporedba drugih razvojnih modula koji koriste WiFi komunikacijski protokol sa ESP8266 modulom}
 Pronalazak alternativnih modula se pokazalo izazovno zbog tolike raširenosti ESP modula.
 U tablici~\ref{tab:usporedba} je vidljivo i zašto je to tako.
-Moduli CC3000 i RN-131 su u zajednici i od strane proizvođača označeni kao NRND (engl. \textit{Not Recommended for New Designs}) jer se više ne podržavaju.
-Cijenovno niti funkcionalno nisu nimalo adekvatni za korištenje u \textit{IoT} svrhe.
+Moduli CC3000 i RN-131 su u zajednici i od strane proizvođača označeni kao NRND (engl. \textit{Not Recommended for New Designs}) jer više nisu podržani.
+Cijenovno niti funkcionalno nisu više adekvatni za korištenje u \textit{IoT} svrhe.
 
 %tablica {{{
-\begin{center}
     \begin{table}[h]
-        \begin{tabular}{ |c||c|c|c|c| }
+        \centering
+        \resizebox{\columnwidth}{!}{
+        \begin{tabular} { |c||c|c|c|c| }
             \hline
             \textbf{Kategorija} & \textbf{ESP8266} & \textbf{ESP32} & \textbf{CC3000} & \textbf{RN-131} \\
             \hline
@@ -190,14 +208,31 @@ Cijenovno niti funkcionalno nisu nimalo adekvatni za korištenje u \textit{IoT} 
             \textbf{Cijena [\$]} & 6.95 & 8.95 & 34.95 & 35.38\\
             \hline
         \end{tabular}
-        \caption{usporedba značajki WiFi modula i cjena}
-        \label{tab:usporedba}
+        }
+        \caption{usporedba značajki WiFi modula i cjena}\label{tab:usporedba}
     \end{table}
-\end{center}
 %}}}
 
 C3000 i RN-131 moduli nemaju programljivi mikrokontroler, ne koriste suvremeni 802.11n standard koji je znatno brži te su cjenovno i po nekoliko puta skuplji od vrlo močnih ESP modula.
 Iz tog su se razloga ESP moduli probili na tržištu i u tolikoj se mjeri proširili.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{esp32.jpg}
+    \caption{Modul ESP32}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{CC3000.jpg}
+    \caption{Modul CC3000}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{rn131.jpg}
+    \caption{Modul RN-131}
+\end{figure}
 %}}}
 
 %MQTT {{{
@@ -223,10 +258,17 @@ Ta je opcija vrlo korisna kod objavljivanja podataka primjerice nekih senzora za
 
 MQTT klijent je bilokakav uređaj spojen na internet koji izvršava kod MQTT biblioteke te je spojeno na MQTT broker.
 Klijenti su implementirani već za gotovo sve platforme (npr. Arduino, iOS, Android) u raznim programskim jezicima (npr. Python, C, C++, C\#, Java).
+Također i drugi ESP modul može biti klijent tako da izvršava kod ovisno o poruci nekoga drugoga uređaja.
 
 MQTT broker je program koji se izvršava na nekom poslužitelju te upravlja porukama i uređajima koji su na njega spojeni.
 Brine se o pravim MAC i IP adresama uređaja na mreži koje su mu potrebne za samu realizaciju izmjena poruka kako se korisnici ne bi time trebali zamarati.
 Također se brine i o autorizaciji uređaja na mreži tako da prava na pretplačivanje mogu biti implementirana pomoću korisničkih imena i lozinki kako bi se očuvala privatnost podataka i spriječile razne maliciozne aktivnosti.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{Topologija.png}
+    \caption{Uloga MQTT brokera}
+\end{figure}
 %}}}
 
 % Homie {{{
@@ -236,18 +278,37 @@ Njome se propisuje i implementira struktura tema i poruka kako bi se na temelju 
 Nalaže da je uređaj fizička instanca sklopovlja koji može logički prestavljati više čvorova.
 Čvor je logički odvojen dio uređaja kao na primjer neki senzor temperature ili relej koji upravlja svjetlom.
 
-Jedan čvor može imati više svojstva koja ga pobliže označuju kao na primjer RGB Led dioda koja može imati svojstva \textit{intenzitet} i \textit{boja}.
+Jedan čvor može imati više svojstava koja ga pobliže označuju kao na primjer RGB Led dioda koja može imati svojstva \textit{intenzitet} i \textit{boja}.
 Svojstva mogu biti postavljiva ili ne postavljiva što čuva integritet tih svojstava tako da možemo objavljivanjem poruka mjenjati samo vrijednosti koje su promjenjive kao što su paljenje odnosno gašenje svjetla dok ne možemo mjenjati trenutnu temperaturu koju temperaturni senzor trenutno mjeri.
 Atributi pobliže označavaju uređaje, čvorove i svojstva.
 Oni se u temi označavaju sa početnim znakom "\$" i vrlo su bitni kod već spomenute implementacije automatskog otkrivanja uređaja i čvorova.
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{Homie.png}
+    \caption{Logička podjela Homie konvencije}
+\end{figure}
 
 Svaka tema u ovoj konvenciji ima korijen \textit{"Homie"} nakon čega ide identifikator uređaja što može biti neki tekst definiran od strane programera ili uobičajeno MAC adresa mrežnog adaptera.
 Svi atributi vezani uz uređaj slijede identifikatoru te počinju znakom "\$".
-To su razni podaci od kojih je bitno za napomenuti MAC adresa (\textit{\$mac}), lokalna IP adresa (\textit{\$localip}), čvorovi (\textit{\$nodes}), stanje uređaja (\textit{\$state}), statistika uređaja (\textit{\$stats}) te ime uređaja (\textit{\$name}).
+To su razni podaci od kojih je bitno za napomenuti:
+\begin{itemize}
+    \item \textit{\$mac} - MAC adresa
+    \textit{\item \$localip} - lokalna IP adresa
+    \item \textit{\$nodes} - čvorovi 
+    \item \textit{\$state} - stanje uređaja
+    \item \textit{\$stats} - statistika uređaja
+    \item \textit{\$name} - ime uređaja
+\end{itemize}
 
 Nakon identifikatora uređaja slijedi identifikator čvora.
 Identifikator čvora je definiran od strane programera te mora biti jedinstven za taj uređaj.
-Atributi čvora su ime (\textit{\$name}), tip (\textit{\$type}) i svojstva (\textit{\$propertyes}) koji slijede identifikator čvora.
+Atributi čvora su:
+\begin{itemize}
+    \item \textit{\$name} - ime
+    \item \textit{\$type} - tip
+    \item \textit{\$propertyes} - svojstva 
+\end{itemize}
+koji slijede identifikator čvora.
 
 Slijedi svojstvo čvora koje također mora biti jedinstveno unutar jednoga čvora.
 Atributi svojstva su ime (\textit{\$name}), postavljivost (\textit{\$settable}), mjerna jedinica (\textit{\$unit}), tip podataka (\textit{\$datatype}) te format (\textit{\$format}) koji opisuje opseg vrijednosti.
@@ -260,6 +321,18 @@ Primjer teme svjetla spojenog na relej na nekom uređaju po Homie konvenciji je:
 %}}}
 
 \chapter{Programska podrška za praćenje komunikacije više modula ESP8266 na WiFi mreži}
+Kod implementacije programske podrške treba prvo napraviti topologiju sustava.
+Sustav ima krajnje uređaje koji svoje poruke šalju poslužitelju te poslužitelj te poruke prosljeđuje dalje pretplačenim klijentima.
+Pretplačeni klijent je u ovoj implementaciji program \textit{"parser.py"} koji, kako samo ime kaže, parsira poruke te ih sprema na odgovarajuč način u bazu podataka.
+Bazi podataka treba pristupiti te se to vrši uz pomoć API-a koji vrši odgovarajući SQL upit te vraća sadržaj baze u JSON formatu.
+Ideja topologije sustava je prikazana na slici~\ref{fig:mreza}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{mreza.png}
+    \caption{Topologija sustava}\label{fig:mreza}
+\end{figure}
+
 % Implementacija klijenta {{{
 \section{Implementacija MQTT klijenta na ESP8266 modul pomoću Homie konvencije}
 Arduino IDE je vrlo popularan u zajednici te je jako dobro podržan što od strane zajednice što od strane proizvođača Arduino mikrokontrolera.
@@ -362,10 +435,10 @@ Funkcija postavki je:
     \item ota - Bežično reprogramiranje uređaja
 \end{itemize}
 
-U konfiguracijskom režimu rada uređaj izlaže funkcionalnosti JSON API-a preko kojeg možemo pozivati metode navedene u tablici~\ref{tab:api}
+U konfiguracijskom režimu rada uređaj izlaže funkcionalnosti JSON API-a preko kojeg možemo pozivati metode navedene u tablici~\ref{tab:API}
 % Tablica 2 {{{
-\begin{center}
     \begin{table}[h]
+        \centering
         \begin{tabular}{ |c|c|p{4cm}|p{4cm}| }
             \hline
             Metoda & Funkcija & Opis & Odgovori\\
@@ -385,10 +458,8 @@ U konfiguracijskom režimu rada uređaj izlaže funkcionalnosti JSON API-a preko
             PUT & /proxy/control & Postavljanje funkcije posrednika & 200 OK, 400 Bad Request\\
             \hline
         \end{tabular}
-        \caption{API pozivi}
-        \label{tab:API}
+        \caption{API pozivi}\label{tab:API}
     \end{table}
-\end{center}
 % }}}
 Prema tome se JSON datoteka s postavkama se šalje na uređaj pomoću programa \textit{curl} koristeći /config funkciju naredbom:
 \begin{lstlisting}[language=Bash]
@@ -413,25 +484,28 @@ Uloga baze podataka je ta da zapisuje u sebi stanja svih čvorova svih uređaja 
 Platforma poslužitelja je raspian distribucija GNU/Linux operacijskog sustava jer je poslužitelj popularno malo računalo Raspberry PI.
 Baza podata se instalira pomoću naredbe:
 \begin{lstlisting}
-    \$ sudo apt-get install sqlite
+    #sudo apt-get install sqlite
 \end{lstlisting}
 koja uz pomoć upravljača paketima \textit{apt} instalira sustav za upravljanje bazama podataka zajedno sa svim programima o kojima taj sustav ovisi.
 
 Pokretanjem sustava za upravljanje bazom podataka se prikazuje naredbeni redak u koji upisom teksta SQL sintakse radimo novu
 bazu podataka.
-Struktura baze podataka je:
-\begin{table}[h]
+Struktura baze podataka je navedena u tablicama~\ref{tab:mqtt_table} i~\ref{tab:node_table}.
+Dvije relacijske tablice su povezane zajedničkim ključem \textit{mac} te se u MQTT tablici čuvaju podaci vezani za sam uređaj dok se u \textit{node} tablici čuvaju podaci vezani za pojedine čvorove.
+% MQTT table {{{
+\begin{table}[H]
+    \centering
     \begin{tabular}{ |c|l| }
         \hline
         Ime & Opis \\
         \hline
-        name & Ime uređaja\\
+        \underline{name} & Ime uređaja\\
         \hline
         online & Status uređaja\\
         \hline
         localip & Lokalna IP adresa uređaja\\
         \hline
-        mac & MAC adresa uređaja\\
+        \underline{mac} & MAC adresa uređaja\\
         \hline
         homie & Verzija implementacije Homie konvencije\\
         \hline
@@ -452,18 +526,21 @@ Struktura baze podataka je:
         ota\_status & Status OTA\\
         \hline
     \end{tabular}
-    \caption{Shema tablice mqtt}
+    \caption{Shema tablice mqtt}\label{tab:mqtt_table}
 \end{table}
 
+% }}}
 
-\begin{table}[h]
+% Node Table {{{
+\begin{table}[H]
+    \centering
     \begin{tabular}{ |c|l| }
         \hline
         Ime & Opis\\
         \hline
         mac & MAC adresa uređaja\\
         \hline
-        node & Ime čvora\\
+        \underline{node} & Ime čvora\\
         \hline
         type & Tip čvora\\
         \hline
@@ -472,29 +549,27 @@ Struktura baze podataka je:
         node\_on & ??\\
         \hline
     \end{tabular}
-    \caption{Shema tablice node}
+    \caption{Shema tablice node}\label{tab:node_table}
 \end{table}
 % }}}
+% }}}
 
-% Parser
+% Parser {{{
 \section{Parser}
 Parser je program napisan u programskom jeziku Python te mu je zadaća primati MQTT poruke sa uređaja, parsirati te poruke i sadržaj spremati u bazu podataka.
 
 Za povezivanje na MQTT broker koristi se \textit{phao.mqtt.client} biblioteka.
 Instalacija te biblioteke se provodi uz pomoć programa \textit{pip} koji služi za instalaciju python paketa naredbom
 \begin{lstlisting}[language=Bash]
-    \$ pip -g install phao-mqtt
+    #pip -g install phao-mqtt
 \end{lstlisting}
 Opcija -g nalaže to da se taj paket instalira globalno na računalo a ne samo lokalno za taj projekt.
-
 Biblioteka se u kod uključuje linijom
 \begin{lstlisting}[language=Python]
     import phao.mqtt.client as mqtt
 \end{lstlisting}
 čime smo postavili alias \textit{mqtt} te možemo koristiti njene funkcije samo koristeći taj alias.
-
 Povezivanje sa bazom podataka se vrši pomoću sqlite3 biblioteke koja se također instalira pomoću programa pip.
-
 U glavnome djelu programa se povezuje na bazu podataka koja se izrađuje ako ona ne postoji te se provjerava postojanje tablica.
 Zatim se spaja na MQTT broker i pokreće se beskonačna petlja koja čita poruke.
 \begin{lstlisting}[language=Python, caption=Main funkcija programskog koda]
@@ -510,9 +585,144 @@ def main():
 
     client.loop_forever()
 \end{lstlisting}
+Client metode \textit{on\_connect} i \textit{on\_message} u funkcije implementirane od strane programera i uključuju se pomoću referenciranja.
+Te funkcije su implementacije ponašanja parsera prilikom dotičnih događanja.
+Pri uspješnom spajanju na MQTT broker se ispisuje poruka o uspjehu te se klijent pretplačuje na odgovarajuču temu što je u ovome slučaju korijenska tema željenih uređaja.
+\begin{lstlisting}[language=Python, caption=Akcije prilikom spajanja na MQTT broker]
+def on_connect(client, userdata, flags, rc):
+    print("Connected!")
+    client.subscribe(base_topic)
+\end{lstlisting}
+Prilikom primanja poruke se pokreče \textit{on\_message} funkcija koja čita poruku, parsira ju te sprema podatke u bazu podataka.
+% on message {{{
+\begin{lstlisting}[language=Python, caption=Parsiranje poruka i spremanje u bazu podataka]
+def on_message(client, userdata, msg):
+    global database
+    cursor = database.cursor()
+    atribute = msg.topic.split('/')[-1]
+    atribute_value = msg.payload.decode('UTF-8')
+    messages[atribute] = atribute_value
+    if atribute == "\$type":
+        node = msg.topic.split('/')[2]
+        messages["node"] = node
+
+    if (atribute == "\$online" and
+        list(cursor.execute("select count(*) from mqtt;"))[0][0] == 0):
+
+        cursor.execute(
+                         """
+                         insert into mqtt values (
+                         '{}',
+                         '{}',
+                         '{}',
+                         '{}',
+                         '{}',
+                         '{}',
+                         '{}',
+                         '{}',
+                         '{}',
+                         '{}',
+                         '{}',
+                         '{}',
+                         '{}'
+                         );
+            """.format(
+                messages["\$name"],
+                messages["\$online"],
+                messages["\$localip"],
+                messages["\$mac"],
+                messages["\$homie"],
+                messages["signal"],
+                messages["uptime"],
+                messages["name"],
+                messages["version"],
+                messages["\$implementation"],
+                messages["config"],
+                messages["enabled"],
+                messages["status"]
+            )
+                         )
+
+        cursor.execute(
+                         """
+                         insert into node values (
+                         '{}',
+                         '{}',
+                         '{}',
+                         '{}',
+                         '{}'
+                         );
+            """.format(
+                messages["\$mac"],
+                messages["node"],
+                messages["\$type"],
+                messages["\$properties"],
+                messages["on"]
+            )
+                         )
+
+    if(atribute == "uptime" and
+         list(cursor.execute("select count(*) from mqtt;"))[0][0] == 1 and
+         '\$online' in messages.keys()):
+
+        update_mqtt = """
+                            update mqtt
+                            set
+                            name = '{0}',
+                            online = '{1}',
+                            localip = '{2}',
+                            mac = '{3}',
+                            homie = '{4}',
+                            signal = '{5}',
+                            uptime = '{6}',
+                            fwname = '{7}',
+                            fwversion = '{8}',
+                            implementation = '{9}',
+                            config = '{10}',
+                            ota_enabled = '{11}',
+                            ota_status = '{12}'
+                            where mac = '{3}';
+                            """.format(messages["\$name"],
+                                    messages["\$online"],
+                                    messages["\$localip"],
+                                    messages["\$mac"],
+                                    messages["\$homie"],
+                                    messages["signal"],
+                                    messages["uptime"],
+                                    messages["name"],
+                                    messages["version"],
+                                    messages["\$implementation"],
+                                    messages["config"],
+                                    messages["enabled"],
+                                    messages["status"]
+                                    )
+        update_node = """update node
+                            set
+                            mac = '{0}',
+                            node = '{1}',
+                            type = '{2}',
+                            properties = '{3}',
+                            node_on = '{4}'
+                            where mac = '{0}';
+                            """.format(
+                                messages["\$mac"],
+                                messages["node"],
+                                messages["\$type"],
+                                messages["\$properties"],
+                                messages["on"]
+                            )
+
+        cursor.execute(update_mqtt)
+        cursor.execute(update_node)
+
+    database.commit()
+
+\end{lstlisting}
+% }}}
 
 Funkcija za provjeru baze podataka služi tome da pri prvom pokretanju bude provjereno postojanje samih tablica te kreiranje ako one ne postoje.
-Ako pokušaj čitanja daje iznimku onda se stvaraju ispravne tablice čiji je kod zapisan u varijablama \textit{create_mqtt_sql} te \textit{create_node_sql}.
+Ako pokušaj čitanja daje iznimku onda se stvaraju ispravne tablice čiji je kod zapisan u varijablama \textit{create\_mqtt\_sql} te \textit{create\_node\_sql}.
+% stvaranje tablica {{{
 \begin{lstlisting}[language=Python, caption=Funkcija za provjeru baze podataka]
 create_mqtt_sql = """
                        create table mqtt(
@@ -548,10 +758,66 @@ def check_database(base):
         cursor.execute(create_node_sql)
         base.commit()
 \end{lstlisting}
-
 % }}}
 
+Svi se podaci periodički objavljuju.
+% }}}
+
+% API {{{
 \section{API}
+REST API je aplikacijsko sučelje koje putem HTTP protokola primitkom zahtjeva izlaže ili mjenja izložene podatke.
+REST je akronim za stil arhitekture \textit{Representational State Transfer}.
+Korištenje ovakve arhitekture se preferira na internetu zbog količine prenesenih podataka za razliku od SOAP (eng. \textit{Simple Object Access Protokol}) arhitekture.
+
+Programiranje REST API-a je olakšano uz pomoć Flask programskog okruženja za programski jezik Python.
+Nudi već gotova rješenja za razvoj relativno jednostavnih aplikacija te se uključuje u program instalacijom pomoću alata \textit{pip} te uključivanjem u programski kod.
+
+U Flask okruženju se resursi prikazuju kao klase kojima se pridjeljuje kraj putanje URL-a. 
+To se postiže tako da se doda resurs navodeći odgovarajuću klasu te definicijom krajnje točke:
+\begin{lstlisting}
+ api.add_resource(Devices, "/devices")
+\end{lstlisting}
+
+Unutar klase se navode metode imena \textit{get, put, post} i \textit{delete} koje odgovaraju HTTP zahtjevima koji mogu biti poslani.
+Svaka metoda implementira odgovarajuče akcije za tu klasu.
+
+Aplikacija se pokreće u \textit{main} programskom odsječku pozivom \textit{run()} metode.
+\begin{lstlisting}
+app.run(port=5000)
+\end{lstlisting}
+
+
+Kompletan programski kod izgleda ovako:
+\begin{lstlisting}[language=Python, caption=REST API programski kod]
+from flask import Flask
+from flask_restful import Resource, Api
+from sqlalchemy import create_engine
+from flask_jsonpify import jsonify
+
+db = create_engine("sqlite:///mqtt.db")
+app = Flask(__name__)
+api = Api(app)
+
+
+class Devices(Resource):
+    def get(self):
+        connection = db.connect()
+        query = connection.execute("""
+                                  select * from mqtt, node
+                                  where mqtt.mac = node.mac;
+                                  """)
+        result = [dict(zip(tuple(query.keys()), i)) for i in query.cursor]
+        return jsonify(result)
+
+
+api.add_resource(Devices, "/devices")
+
+if __name__ == "__main__":
+    app.run(port=5000)
+\end{lstlisting}
+
+Get metoda implementira spajanje na bazu podataka, izvršavanje SQL upita te vraća JSON prikaz cijele baze podataka.
+% }}}
 
 \chapter{Zaključak}
 Zaključak.
