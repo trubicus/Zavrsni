@@ -92,12 +92,12 @@
 
 % Uvod {{{
 \chapter{Uvod}
-ESP8266 je System on Chip (SoC) rješenje tvrtke Espresiff Systems vrlo malene površine mnogih mogučnosti.
-Dizajniran je kao vrlo jeftin modul sa mogučnošću spajanja na WiFi mrežu te niskom potrošnjom energije što ga čini vrlo povoljnim za ugrađivanje u IoT (\textit{Internet Of Things}) uređaje.
-U ovome će radu ESP8266 \textit{SoC} biti korišten kao krajnji čvor u sustavu bežičnog prikupljanja podataka, nadziranja te upravljanja koji komunicira s ostalim sustavom koristeći \textit{Message Queueing Telemetry Transport} protokol (MQTT).
-Topologija takvog sustava se sastoji od krajnjeg čvora na kojem je spojen neki uređaj koji želimo kontrolirati ili nadzirati, pristupne točke WiFi mreži, poslužitelja na kojemu se nalaze MQTT broker za upravljanje porukama, baza podataka koja sadrži trenutne podatke čvorova te API kao sučelje između baze podataka i krajnjeg klijenta.
-Ovakav sustav je vrlo jednostavan i jeftin za implementaciju te je izrazito jako skalibilan što znači da pisanjem vrlo jednostavnog programskog koda za pojedini čvor možemo u svoju mrežu postaviti virtualno beskonačno krajnjih čvorova kojima se vrlo jednostavno može upravljati. 
-Cilj ovoga rada je napraviti gotov sustav otvorenoga koda koji će prateći \textit{Homie} konvenciju za MQTT protokol olakšati amaterima brzo rađenje prototipa bilo iz znatiželje, potrebe ili kreativnosti.
+ESP8266 je System on Chip (SoC) rješenje tvrtke Espresiff Systems vrlo malene površine mnogih mogućnosti.
+Dizajniran je kao vrlo jeftin modul sa mogućnošću spajanja na WiFi mrežu te niskom potrošnjom energije što ga čini vrlo povoljnim za ugrađivanje u IoT (\textit{Internet Of Things}) uređaje.
+U ovome radu će ESP8266 \textit{SoC} biti korišten kao krajnji čvor u sustavu bežičnog prikupljanja podataka, nadziranja te upravljanja koji komunicira s ostalim sustavom koristeći \textit{Message Queueing Telemetry Transport} protokol (MQTT).
+Topologija takvog sustava sastoji se od krajnjeg čvora na kojem je spojen uređaj koji želimo kontrolirati ili nadzirati, pristupne točke WiFi mreži, poslužitelja na kojemu se nalaze MQTT \textit{broker}\footnote{objasni što je to] za upravljanje porukama, baza podataka koja sadrži trenutne podatke čvorova te API kao sučelje između baze podataka i krajnjeg klijenta.
+Ovakav sustav je vrlo jednostavan i jeftin za implementaciju te je izrazito skalabilan što znači da, pisanjem vrlo jednostavnog programskog koda za pojedini čvor, možemo u svoju mrežu postaviti virtualno beskonačno krajnjih čvorova kojima se vrlo jednostavno može upravljati. 
+Cilj ovoga rada je napraviti gotov sustav otvorenoga koda koji će, prateći \textit{Homie} konvenciju za MQTT protokol, olakšati amaterima brzo rađenje prototipa bilo iz znatiželje, potrebe ili kreativnosti.
 %}}}
 
 \chapter{Razrada}
@@ -106,7 +106,7 @@ Cilj ovoga rada je napraviti gotov sustav otvorenoga koda koji će prateći \tex
 \section{ESP8266}
 ESP8266 je \textit{SoC} koji u sebi ima mikrokontroler RISC arhitekture te WiFi modul za spajanje na mrežu.
 Ciljano tržište za ovaj čip su hobisti koji žele neku svoju ideju pretvoriti u stvarnost na vrlo jednostavan način.
-Dizajniran je vrlo jednostavno i kompaktno kako bi cijena čipa bila što niža te zato što je namjenjen za jednostavne i lokalizirane poslove koji uključuju upravljanje vrlo malim brojem uređaja odjednom.
+Dizajniran je vrlo jednostavno i kompaktno kako bi cijena čipa bila što niža te zato što je namijenjen za jednostavne i lokalizirane poslove koji uključuju upravljanje vrlo malim brojem uređaja istovremeno.
 Točno u tome leži prava snaga čipa jer možemo imati više čipova koji komuniciraju međusobno umjesto da imamo jedan snažan mikrokontroler koji će upravljati uređajima centralizirano.
 
 \begin{figure}[h]
@@ -132,8 +132,8 @@ Vanjske QSPI \textit{flash} memorije do 16MiB ovisno o modelu, IEEE 802.11 b/g/n
 \section{Povezivost}
 Najbitnije sučelje prema vanjskome svijetu na ESP8266 su bežična mreža i 16 GPIO pinova.
 Mreža podržava IEEE 802.11 b/g/n protokol, P2P konfiguraciju te TCP/IP protokolni stog.
-GPIO pinovi se mogu zasebno programirati kao ulazi/izlazi, postaviti im \textit{pull-up/down} otpornike, te svaki ima ugrađen 10 bitni digitalno-analogni pretvornik tako da se svaki pin ponaša kao analogni izlaz.
-Ima također jedan analogan ulaz sa 10 bitnim analogno-digitalnim pretvornikom za spajanje raznih analognih senzora bez posebnih sučelja.
+GPIO pinovi se mogu zasebno programirati kao ulazi/izlazi, postaviti im \textit{pull-up/down} otpornike, te svaki ima ugrađen 10 bitni digitalno-analogni pretvornik što omogućuje ponašanje kao analogni izlaz.
+Ima također jedan analogni ulaz sa 10 bitnim analogno-digitalnim pretvornikom za spajanje raznih analognih senzora bez posebnih sučelja.
 \begin{figure}[h]
     \centering
     \includegraphics[scale=0.8]{ESP-Pin-Out.png}
@@ -144,7 +144,7 @@ Ima također jedan analogan ulaz sa 10 bitnim analogno-digitalnim pretvornikom z
 % Programiranje{{{
 \section{Programiranje} 
 ESP8266 se može programirati na više različitih načina.
-Originalno se programirao uz pomoć drugoga mikrokontrolera sve dok firma Espressif Systems nije izdala poseban \textit{SDK}(  eng. \textit{Software Development Kit} ) nakon čega to više nije bilo potrebno.
+Originalno se programirao uz pomoć drugoga mikrokontrolera sve dok firma Espressif Systems nije izdala poseban \textit{SDK}(eng. \textit{Software Development Kit}) nakon čega to više nije bilo potrebno.
 Nakon toga su se počeli javljat mnogi SDK-ovi ponajviše otvorenog koda zajednice programera od čega su najpoznatiji:
     \begin{itemize}
         \item NodeMCU - baziran na skriptnom programskom jeziku Lua
@@ -159,16 +159,16 @@ Nakon toga su se počeli javljat mnogi SDK-ovi ponajviše otvorenog koda zajedni
     \caption{Arduino razvojno okruženje}
 \end{figure}
 
-Zbog velike raširenosti Arduino mikrokontrolera je zajednica programera razvila SDK za Arduino razvojno sučelje.
-Cilj je bio približavanje ESP8266 modula amaterima te olakšanje razvoja firmware-a kroz poznatu sintaksu, poznato jednostavno razvojno okruženje te već postoječe biblioteke.
+Zbog velike raširenosti Arduino mikrokontrolera zajednica programera je razvila SDK za Arduino razvojno sučelje.
+Cilj je bio približavanje ESP8266 modula amaterima te olakšanje razvoja firmware-a kroz poznatu sintaksu, poznato jednostavno razvojno okruženje te već postojeće biblioteke.
 %}}}
 
 %Usporedba {{{
 \section{Usporedba drugih razvojnih modula koji koriste WiFi komunikacijski protokol sa ESP8266 modulom}
 Pronalazak alternativnih modula se pokazalo izazovno zbog tolike raširenosti ESP modula.
 U tablici~\ref{tab:usporedba} je vidljivo i zašto je to tako.
-Moduli CC3000 i RN-131 su u zajednici i od strane proizvođača označeni kao NRND (engl. \textit{Not Recommended for New Designs}) jer više nisu podržani.
-Cijenovno niti funkcionalno nisu više adekvatni za korištenje u \textit{IoT} svrhe.
+Moduli CC3000 i RN-131 su u zajednici i od strane proizvođača označeni kao NRND (eng. \textit{Not Recommended for New Designs}) jer više nisu podržani.
+Cjenovno niti funkcionalno nisu više adekvatni za korištenje u \textit{IoT} svrhe.
 
 %tablica {{{
     \begin{table}[h]
@@ -213,8 +213,8 @@ Cijenovno niti funkcionalno nisu više adekvatni za korištenje u \textit{IoT} s
     \end{table}
 %}}}
 
-C3000 i RN-131 moduli nemaju programljivi mikrokontroler, ne koriste suvremeni 802.11n standard koji je znatno brži te su cjenovno i po nekoliko puta skuplji od vrlo močnih ESP modula.
-Iz tog su se razloga ESP moduli probili na tržištu i u tolikoj se mjeri proširili.
+C3000 i RN-131 moduli nemaju programljivi mikrokontroler, ne koriste suvremeni 802.11n standard koji je znatno brži te su cjenovno i po nekoliko puta skuplji od vrlo moćnih ESP modula.
+Iz tog su se razloga ESP moduli probili na tržištu i u tolikoj mjeri se proširili.
 
 \begin{figure}[h]
     \centering
@@ -237,32 +237,32 @@ Iz tog su se razloga ESP moduli probili na tržištu i u tolikoj se mjeri proši
 
 %MQTT {{{
 \section{Message Queuing Telemetry Transport - \textbf{MQTT}}
-MQTT je protokol široko primjenjen u \textit{IoT} sustavima temeljen na prijenosu poruka u režimu pretplate i objave.
+MQTT protokol široko je primijenjen u \textit{IoT} sustavima te je temeljen na prijenosu poruka u režimu pretplate i objave.
 Prijenos poruka se vrši preko TCP/IP protokola te se za to brine program na poslužitelju koji ima ulogu brokera.
-Pretplata i objava se vrše na temelju teme (eng. \textit{topic}) gdje uređaji MQTT brokeru šalju poruke koje taj broker ovisno o temi šalje drugim uređajima koji su na tu temu pretplačeni.
-Prava moć MQTT protokola su teme koje zamjenjuju MAC i IP adrese uređaja kako bi postavljanje infrastrukture postalo vrlo trivijalno i lagano za implementirati.
+Pretplata i objava se vrše na temelju teme (eng. \textit{topic}) gdje uređaji MQTT brokeru šalju poruke koje taj broker ovisno o temi šalje drugim uređajima koji su na tu temu pretplaćeni.
+Prava moć MQTT protokola su teme koje zamjenjuju MAC i IP adrese uređaja kako bi postavljanje infrastrukture postalo vrlo trivijalno i lagano za implementirati?što je pjesnik htio reći, radije razloži na više kraćih al da čitatelju bude jasno.
 Tema je oblika \textit{"ovo/je/primjer/teme"} gdje je svaka razina teme odvojena separatorom \textit{"/"}.
-Tema može imati bilokoliko razina te se one mogu adresirati pomoću zamjenskih znakova:
+Tema može imati koliko god razina je potrebno te se one mogu adresirati pomoću zamjenskih znakova:
 \begin{itemize}
     \item '+' - predstavlja jednu razinu u temi. Npr. tema \textit{"mojdom/prizemlje/+/temperatura"} će prikazivati sve poruke na temama \textit{"mojdom/prizemlje/kuhinja/temperatura"} te \textit{"mojdom/prizemlje/dnevnasoba/temperatura"}.
     \item '\#' - predstavlja više razina u temi. Npr. tema \textit{"mojdom/prizemlje/\#"} će prikazivati sve teme koje su podskup ove teme.
 \end{itemize}
-Ovakva struktura tema je vrlo pregledna i čitka te se na taj način može vrlo dobro logički odjeliti svaki čvor unutar takve mreže što čini MQTT protokol vrlo pogodnim za \textit{IoT} primjenu.
-Svaki uređaj se nalazi na svojoj temi koja pobliže opisuje gdje se taj uređaj nalazi te pomoću teme možemo iščitati semantiku poslane poruke.
+Ovakva struktura tema vrlo je pregledna i čitka te se na taj način može vrlo dobro logički odijeliti svaki čvor unutar takve mreže što čini MQTT protokol vrlo pogodnim za \textit{IoT} primjenu.
+Svaki uređaj se nalazi na svojoj temi koja pobliže opisuje gdje se uređaj nalazi te pomoću teme možemo iščitati semantiku poslane poruke.
 Poseban početni znak koji se može naći u temi je znak dolara \textit{"\$"} koji predstavlja unutarnje statistike samog MQTT brokera.
-Na takve teme ne možemo objavljivati poruke a nisu ni podložne zamjenskim znakovima tako da ako se uređaj pretplati na temu \textit{"\#"} dobivat će sve poruke osim tih koje se nalaze na temama unutarnjih statistika.
+Na takve teme ne možemo objavljivati poruke, a nisu ni podložne zamjenskim znakovima tako da, ukoliko se uređaj pretplati na temu \textit{"\#"}, dobivat će sve poruke osim tih koje se nalaze na temama unutarnjih statistika(gdje ti se prvi put pojavljuje statistika, objasni koje značenje ima u okviru tvog rada).
 
-Poruke mogu biti i očuvane (eng. \textit{retained}) tako da se prilikom objavljivanja poruke postavi zastavica očuvanja što MQTT brokrer interpretira tako da na toj temi sprema zadnju objavljenu poruku.
-Tako očuvana poruka je objavljena svim novim uređajima koji se pretplačuju na tu temu u nekom kasnijem trenutku tako da ti uređaji dobivaju trenutne vrijednosti na takvim temama.
-Ta je opcija vrlo korisna kod objavljivanja podataka primjerice nekih senzora zato što takvi uređaji odmah imaju trenutne vrijednosti s kojima odmah mogu početi baratati umjesto da čekaju tek sljedeću objavu.
+Poruke mogu biti i očuvane (eng. \textit{retained}) tako da se, prilikom objavljivanja poruke, postavi zastavica očuvanja što MQTT broker interpretira na način da sprem zadnju objavljenu poruku na toj temi.
+Tako očuvana poruka objavljena je svim novim uređajima koji se pretplaćuju na tu temu u nekom kasnijem trenutku tako da ti uređaji dobivaju trenutne vrijednosti na takvim temama.(tako da tako da tako da, budi maštovitiji)
+Ova opcija je vrlo korisna kod objavljivanja podataka, primjerice nekih senzora, zato što takvi uređaji odmah imaju trenutne vrijednosti s kojima odmah mogu početi manipulirati umjesto da čekaju tek sljedeću objavu.
 
-MQTT klijent je bilokakav uređaj spojen na internet koji izvršava kod MQTT biblioteke te je spojeno na MQTT broker.
+MQTT klijent je uređaj spojen na internet koji izvršava kod MQTT biblioteke te je spojeno na MQTT broker.
 Klijenti su implementirani već za gotovo sve platforme (npr. Arduino, iOS, Android) u raznim programskim jezicima (npr. Python, C, C++, C\#, Java).
-Također i drugi ESP modul može biti klijent tako da izvršava kod ovisno o poruci nekoga drugoga uređaja.
+Također, i drugi ESP modul može biti klijent tako da izvršava kod ovisno o poruci drugog uređaja.
 
-MQTT broker je program koji se izvršava na nekom poslužitelju te upravlja porukama i uređajima koji su na njega spojeni.
+MQTT broker je program koji se izvršava na poslužitelju te upravlja porukama i uređajima koji su na njega spojeni.
 Brine se o pravim MAC i IP adresama uređaja na mreži koje su mu potrebne za samu realizaciju izmjena poruka kako se korisnici ne bi time trebali zamarati.
-Također se brine i o autorizaciji uređaja na mreži tako da prava na pretplačivanje mogu biti implementirana pomoću korisničkih imena i lozinki kako bi se očuvala privatnost podataka i spriječile razne maliciozne aktivnosti.
+Također se brine i o autorizaciji uređaja na mreži implementirajući prava na pretplaćivanje pomoću korisničkih imena i lozinki kako bi se očuvala privatnost podataka i spriječile razne maliciozne aktivnosti.
 
 \begin{figure}[h]
     \centering
@@ -274,8 +274,8 @@ Također se brine i o autorizaciji uređaja na mreži tako da prava na pretplač
 % Homie {{{
 \section{Homie konvencija za MQTT protokol}
 Homie konvencija je konvencija nastala iz potrebe zajednice za standardiziranim načinom komunikacije između različitih \textit{IoT} uređaja koji koriste MQTT protokol.
-Njome se propisuje i implementira struktura tema i poruka kako bi se na temelju njih mogle implementirati pogodnosti kao što su praćenje verzija firmware-a, OTA (eng. \textit{Over The Air}) osvježavanja tog istog firmware-a, omogučuje automatsko otkrivanje uređaja na mreži te osigurava lakše poimanje mreže uređaja i struktura podataka.
-Nalaže da je uređaj fizička instanca sklopovlja koji može logički prestavljati više čvorova.
+Njome se propisuje i implementira struktura tema i poruka kako bi se na temelju njih mogle implementirati pogodnosti kao što su praćenje verzija firmware-a, OTA (eng. \textit{Over The Air}) osvježavanja firmware-a, automatsko otkrivanje uređaja na mreži te lakše poimanje mreže uređaja i struktura podataka.
+Nalaže da je uređaj fizička instanca sklopovlja koji može logički predstavljati više čvorova.
 Čvor je logički odvojen dio uređaja kao na primjer neki senzor temperature ili relej koji upravlja svjetlom.
 
 Jedan čvor može imati više svojstava koja ga pobliže označuju kao na primjer RGB Led dioda koja može imati svojstva \textit{intenzitet} i \textit{boja}.
@@ -290,7 +290,7 @@ Oni se u temi označavaju sa početnim znakom "\$" i vrlo su bitni kod već spom
 
 Svaka tema u ovoj konvenciji ima korijen \textit{"Homie"} nakon čega ide identifikator uređaja što može biti neki tekst definiran od strane programera ili uobičajeno MAC adresa mrežnog adaptera.
 Svi atributi vezani uz uređaj slijede identifikatoru te počinju znakom "\$".
-To su razni podaci od kojih je bitno za napomenuti:
+To su razni podaci od kojih je bitno napomenuti:
 \begin{itemize}
     \item \textit{\$mac} - MAC adresa
     \textit{\item \$localip} - lokalna IP adresa
@@ -301,7 +301,7 @@ To su razni podaci od kojih je bitno za napomenuti:
 \end{itemize}
 
 Nakon identifikatora uređaja slijedi identifikator čvora.
-Identifikator čvora je definiran od strane programera te mora biti jedinstven za taj uređaj.
+Identifikator čvora definiran je od strane programera te mora biti jedinstven za taj uređaj.
 Atributi čvora su:
 \begin{itemize}
     \item \textit{\$name} - ime
@@ -323,9 +323,9 @@ Primjer teme svjetla spojenog na relej na nekom uređaju po Homie konvenciji je:
 \chapter{Programska podrška za praćenje komunikacije više modula ESP8266 na WiFi mreži}
 Kod implementacije programske podrške treba prvo napraviti topologiju sustava.
 Sustav ima krajnje uređaje koji svoje poruke šalju poslužitelju te poslužitelj te poruke prosljeđuje dalje pretplačenim klijentima.
-Pretplačeni klijent je u ovoj implementaciji program \textit{"parser.py"} koji, kako samo ime kaže, parsira poruke te ih sprema na odgovarajuč način u bazu podataka.
-Bazi podataka treba pristupiti te se to vrši uz pomoć API-a koji vrši odgovarajući SQL upit te vraća sadržaj baze u JSON formatu.
-Ideja topologije sustava je prikazana na slici~\ref{fig:mreza}.
+Pretplaćeni klijent je u ovoj implementaciji program \textit{"parser.py"} koji, kako samo ime kaže, parsira poruke te ih sprema na odgovarajući način u bazu podataka.
+Bazi podataka treba pristupiti te se to vrši uz pomoć API-a koji vrši odgovarajući SQL upit vraćajući sadržaj baze u JSON formatu.
+Ideja topologije sustava prikazana je na slici~\ref{fig:mreza}.
 
 \begin{figure}[h]
     \centering
@@ -335,17 +335,17 @@ Ideja topologije sustava je prikazana na slici~\ref{fig:mreza}.
 
 % Implementacija klijenta {{{
 \section{Implementacija MQTT klijenta na ESP8266 modul pomoću Homie konvencije}
-Arduino IDE je vrlo popularan u zajednici te je jako dobro podržan što od strane zajednice što od strane proizvođača Arduino mikrokontrolera.
+Arduino IDE vrlo je popularan u zajednici te je jako dobro podržan što od strane zajednice što od strane proizvođača Arduino mikrokontrolera.
 Zajednica je iz tog razloga napravila biblioteku funkcija za Homie konvenciju za ESP8266 modul.
-Biblioteka se lagano instalira pomoću ugrađenog upravljača bibliotekama u Arduino IDE-u upisom web sjedišta na kojoj se ta biblioteka nalazi te pritiskom ta tipku \textit{Install}.
+Biblioteka se jednostavno instalira pomoću ugrađenog upravljača bibliotekama u Arduino IDE-u upisom web sjedišta na kojoj se ta biblioteka nalazi te pritiskom ta tipku \textit{Install}.
 U kodu se uključivanjem te biblioteke mogu koristiti sve funkcije upisom
 \begin{lstlisting}[language=c++, caption=Uključivanje Homie biblioteke]
     #include <Homie.h>
 \end{lstlisting}
 
 Arduino mikrokontroleri zahtjevaju posebne funkcije \textit{setup()} i \textit{loop()}.
-Uloga \textit{setup} funkcije ulazna funkcija u koji se pišu programski odsječci za postavljanje samog mikrokontrolera nakon čega se beskonačno puta ponavlja funkcija \textit{loop} u kojoj se nalazi kod koji se konstantno izvodi.
-U duhu te konvencije se u \textit{setup} funkciji postavlja ime i verzija firmware-a za OTA postavljanje novog firmwera i poziva se setup metode instance Homie klase.
+Uloga \textit{setup} funkcije je ulazna funkcija u koji se pišu programski odsječci za postavljanje samog mikrokontrolera nakon čega se beskonačno puta ponavlja funkcija \textit{loop} u kojoj se nalazi kod koji se konstantno izvodi.
+U duhu te konvencije se u \textit{setup} funkciji postavlja ime i verzija firmware-a za OTA postavljanje novog firmwera te se poziva setup metoda instance Homie klase.
 \begin{lstlisting}[language=c++]
     setup(){
         Homie_setFirmware("prvi-firmware", "1.0.0");
@@ -353,7 +353,7 @@ U duhu te konvencije se u \textit{setup} funkciji postavlja ime i verzija firmwa
     }
 \end{lstlisting}
 
-U \textit{loop} funkciji se poziva metoda \textit{loop()} Homie objekta čija je funkcija kontrola veze te pozivanje funkcije za upravljanje porukama kada su one objavljene na temu na koju je pretplaćen uređaj.
+U \textit{loop} funkciji poziva se metoda \textit{loop()} Homie objekta čija je funkcija kontrola veze te pozivanje funkcije za upravljanje porukama kada su one objavljene na temu na koju je pretplaćen uređaj.
 
 Za stavaranje novog čvora (u ovome slučaju LED diode) trebamo napraviti novi objekt klase \textit{HomieNode}
 \begin{lstlisting}[language=c++]
@@ -373,8 +373,8 @@ setup(){
 
 Taj se programski kod treba nalaziti u \textit{setup} funkciji nakon postavljanja verzije firmware-a i prije funkcije za postavljanje Homie implementacije jer se prilikom tog postavljanja moraju navesti svi čvorovi koji se nalaze na tom uređaju.
 
-Čvor ledNode je trenutno pretplačen na temu \textit{Homie/DeviceID/ledNode/on}.
-Kad je na toj temi objavljena poruka funkcija ledHandler je pozvana i ona ovisno o sadržaju poruke upravlja LED diodom.
+Čvor ledNode je trenutno pretplaćen na temu \textit{Homie/DeviceID/ledNode/on}.
+Ukoliko je na toj temi objavljena poruka, funkcija ledHandler je pozvana te ona, ovisno o sadržaju poruke, upravlja LED diodom.
 \begin{lstlisting}[language=C++]
 bool ledHandler(const HomieRange& range, const String& value){
    if(value == "ON"){
@@ -398,13 +398,13 @@ bool ledHandler(const HomieRange& range, const String& value){
 \end{lstlisting}
 
 % Boot modeovi i kako se konfigurira
-Programiranje samog uređaja je pomoću Arduino SDK veoma trivijalno.
-U padajućem izborniku se odabire odgovarajuć uređaj te se prema tome postavljaju sve ostale postavke te pritiskom na gumb \textit{Upload} se kod prevede i prebacuje u memoriju uređaja.
-Pri tome na ESP8266 treba pin GPIO0 spojiti na logičku nulu kako bi prebacivanje programa bilo uspješno.
+Programiranje samog uređaja pomoću Arduino SDK jest veoma trivijalno.
+U padajućem izborniku se odabire odgovarajući uređaj, prilagođeno tome se postavljaju sve ostale postavke, zatim pritiskom na gumb \textit{Upload} kod se prevede i prebacuje u memoriju uređaja.
+Pri tome na ESP8266 pin GPIO0 treba spojiti na logičku nulu kako bi prebacivanje programa bilo uspješno.
 
 Uređaj se kod prvog priključivanja nalazi u konfiguracijskom režimu rada.
-U takvom režimu se uređaj ponaša kao bežična pristupna točka lokalnoj mreži čije ime glasi \textit{Homie-xxxxxxxxxxxx} pri čemu je dio sa znakovima \textit{x} MAC adresa uređaja.
-Računalom se spaja na uređaj pri čemu je lozinka točno ta MAC adresa i uređaj tako može primiti konfiguracijsku datoteku u JSON formatu.
+U takvom režimu uređaj se ponaša kao bežična pristupna točka u lokalnoj mreži čije ime glasi \textit{Homie-xxxxxxxxxxxx} pri čemu je dio sa znakovima \textit{x} MAC adresa uređaja.
+Računalo ima mogućnost spajanja na uređaj pri čemu je lozinka točno ta MAC adresa i uređaj tako može primiti konfiguracijsku datoteku u JSON formatu.
 Datoteka izgleda ovako:
 \begin{lstlisting}[language=JavaScript]
 {
@@ -461,14 +461,14 @@ U konfiguracijskom režimu rada uređaj izlaže funkcionalnosti JSON API-a preko
         \caption{API pozivi}\label{tab:API}
     \end{table}
 % }}}
-Prema tome se JSON datoteka s postavkama se šalje na uređaj pomoću programa \textit{curl} koristeći /config funkciju naredbom:
+Prema tome se JSON datoteka s postavkama šalje se na uređaj pomoću programa \textit{curl} koristeći /config funkciju naredbom:
 \begin{lstlisting}[language=Bash]
 curl -X PUT http://homie.config/config --header 'Content-Type: application/json' -d @config.json
 \end{lstlisting}
 
-nakon ćega uređaj vrača kod 200 OK i prelazi u normalan režim rada u kojemu izvršava kod iz memorije.
-LED indikator svojom brzinom paljenja i gašenja naznačuje stanje veze s mrežom i MQTT brokerom.
-Sporo paljenje i gašenje označava spajanje na mrežu dok brzo označava spajanje sa MQTT brokerom nakon čega se LED indikator gasi i uređaj nastavlja izvršavati svoj program.
+nakon čega uređaj vraća kod 200 OK i prelazi u normalan režim rada u kojemu izvršava kod iz memorije.
+LED indikator svojom brzinom paljenja i gašenja signalizira stanje veze s mrežom i MQTT brokerom.
+Sporo paljenje i gašenje signalizira spajanje na mrežu dok brzo signalizira spajanje sa MQTT brokerom nakon čega se LED indikator gasi i uređaj nastavlja izvršavati svoj program.
 
 
 %}}}
@@ -478,18 +478,18 @@ Sporo paljenje i gašenje označava spajanje na mrežu dok brzo označava spajan
 Uloga poslužitelja je pokretanje MQTT brokera i popratnih programa kao što su baza podataka, parser MQTT poruka i API.
 Poslužitelju se pristupa pomoću ssh protokola i njime se upravlja preko naredbene linije.
 
-SQLite baza podataka je vrlo lagana baza podataka koja koristi SQL sintaksu, ne zahtjeva posebne procese za rad i zapisuje promjene direktno u datoteku na disku.
+SQLite baza podataka je vrlo jednostavna baza podataka koja koristi SQL sintaksu, ne zahtjeva posebne procese za rad i zapisuje promjene direktno u datoteku na disku.
 Uloga baze podataka je ta da zapisuje u sebi stanja svih čvorova svih uređaja u sustavu za nadziranje kako bismo pomoću API-a mogli pristupiti tim podacima.
 
-Platforma poslužitelja je raspian distribucija GNU/Linux operacijskog sustava jer je poslužitelj popularno malo računalo Raspberry PI.
-Baza podata se instalira pomoću naredbe:
+Platforma poslužitelja je raspian distribucija GNU/Linux operacijskog sustava jer je poslužitelj popularno malo računalo Raspberry PI.??
+Baza podataka se instalira pomoću naredbe:
 \begin{lstlisting}
     #sudo apt-get install sqlite
 \end{lstlisting}
-koja uz pomoć upravljača paketima \textit{apt} instalira sustav za upravljanje bazama podataka zajedno sa svim programima o kojima taj sustav ovisi.
+koja uz pomoć upravljača paketima \textit{apt} instalira sustav za upravljanje bazama podataka zajedno sa svim programima o kojima sustav ovisi.
 
-Pokretanjem sustava za upravljanje bazom podataka se prikazuje naredbeni redak u koji upisom teksta SQL sintakse radimo novu
-bazu podataka.
+Pokretanjem sustava za upravljanje bazom podataka prikazuje se naredbeni redak u koji upisom teksta SQL sintakse radimo novu
+bazu podataka.??
 Struktura baze podataka je navedena u tablicama~\ref{tab:mqtt_table} i~\ref{tab:node_table}.
 Dvije relacijske tablice su povezane zajedničkim ključem \textit{mac} te se u MQTT tablici čuvaju podaci vezani za sam uređaj dok se u \textit{node} tablici čuvaju podaci vezani za pojedine čvorove.
 % MQTT table {{{
@@ -559,19 +559,19 @@ Dvije relacijske tablice su povezane zajedničkim ključem \textit{mac} te se u 
 Parser je program napisan u programskom jeziku Python te mu je zadaća primati MQTT poruke sa uređaja, parsirati te poruke i sadržaj spremati u bazu podataka.
 
 Za povezivanje na MQTT broker koristi se \textit{phao.mqtt.client} biblioteka.
-Instalacija te biblioteke se provodi uz pomoć programa \textit{pip} koji služi za instalaciju python paketa naredbom
+Instalacija te biblioteke provodi se uz pomoć programa \textit{pip} koji služi za instalaciju python paketa naredbom
 \begin{lstlisting}[language=Bash]
     #pip -g install phao-mqtt
 \end{lstlisting}
-Opcija -g nalaže to da se taj paket instalira globalno na računalo a ne samo lokalno za taj projekt.
+Opcija -g nalaže da se paket instalira globalno na računalo, a ne samo lokalno za taj projekt.
 Biblioteka se u kod uključuje linijom
 \begin{lstlisting}[language=Python]
     import phao.mqtt.client as mqtt
 \end{lstlisting}
 čime smo postavili alias \textit{mqtt} te možemo koristiti njene funkcije samo koristeći taj alias.
-Povezivanje sa bazom podataka se vrši pomoću sqlite3 biblioteke koja se također instalira pomoću programa pip.
-U glavnome djelu programa se povezuje na bazu podataka koja se izrađuje ako ona ne postoji te se provjerava postojanje tablica.
-Zatim se spaja na MQTT broker i pokreće se beskonačna petlja koja čita poruke.
+Povezivanje sa bazom podataka vrši se pomoću sqlite3 biblioteke koja se također instalira pomoću programa pip.
+U glavnome dijelu programa povezuje se na bazu podataka (koja se izrađuje ukoliko ne postoji) te se provjerava postojanje tablica.
+Zatim se spaja na MQTT broker i pokreće beskonačna petlja koja čita poruke.
 \begin{lstlisting}[language=Python, caption=Main funkcija programskog koda]
 def main():
     global database
@@ -585,15 +585,15 @@ def main():
 
     client.loop_forever()
 \end{lstlisting}
-Client metode \textit{on\_connect} i \textit{on\_message} u funkcije implementirane od strane programera i uključuju se pomoću referenciranja.
+Client metode \textit{on\_connect} i \textit{on\_message} su funkcije implementirane od strane programera i uključuju se putem referenciranja.
 Te funkcije su implementacije ponašanja parsera prilikom dotičnih događanja.
-Pri uspješnom spajanju na MQTT broker se ispisuje poruka o uspjehu te se klijent pretplačuje na odgovarajuču temu što je u ovome slučaju korijenska tema željenih uređaja.
+Pri uspješnom spajanju na MQTT broker ispisuje se poruka o uspjehu te se klijent pretplaćuje na željenu temu što je u ovom slučaju korijenska tema željenih uređaja.
 \begin{lstlisting}[language=Python, caption=Akcije prilikom spajanja na MQTT broker]
 def on_connect(client, userdata, flags, rc):
     print("Connected!")
     client.subscribe(base_topic)
 \end{lstlisting}
-Prilikom primanja poruke se pokreče \textit{on\_message} funkcija koja čita poruku, parsira ju te sprema podatke u bazu podataka.
+Prilikom primanja poruke pokreće se \textit{on\_message} funkcija koja čita poruku, parsira ju te sprema podatke u bazu podataka.
 % on message {{{
 \begin{lstlisting}[language=Python, caption=Parsiranje poruka i spremanje u bazu podataka]
 def on_message(client, userdata, msg):
@@ -720,7 +720,7 @@ def on_message(client, userdata, msg):
 \end{lstlisting}
 % }}}
 
-Funkcija za provjeru baze podataka služi tome da pri prvom pokretanju bude provjereno postojanje samih tablica te kreiranje ako one ne postoje.
+Funkcija za provjeru baze podataka služi tome da, pri prvom pokretanju, bude provjereno postojanje samih tablica te kreiranje ukoliko ne postoje.
 Ako pokušaj čitanja daje iznimku onda se stvaraju ispravne tablice čiji je kod zapisan u varijablama \textit{create\_mqtt\_sql} te \textit{create\_node\_sql}.
 % stvaranje tablica {{{
 \begin{lstlisting}[language=Python, caption=Funkcija za provjeru baze podataka]
@@ -765,21 +765,21 @@ Svi se podaci periodički objavljuju.
 
 % API {{{
 \section{API}
-REST API je aplikacijsko sučelje koje putem HTTP protokola primitkom zahtjeva izlaže ili mjenja izložene podatke.
+REST API je aplikacijsko sučelje koje putem HTTP protokola primitkom zahtjeva izlaže ili mijenja izložene podatke.
 REST je akronim za stil arhitekture \textit{Representational State Transfer}.
-Korištenje ovakve arhitekture se preferira na internetu zbog količine prenesenih podataka za razliku od SOAP (eng. \textit{Simple Object Access Protokol}) arhitekture.
+Korištenje ovakve arhitekture preferira se na internetu zbog količine prenesenih podataka za razliku od SOAP (eng. \textit{Simple Object Access Protokol}) arhitekture.
 
 Programiranje REST API-a je olakšano uz pomoć Flask programskog okruženja za programski jezik Python.
 Nudi već gotova rješenja za razvoj relativno jednostavnih aplikacija te se uključuje u program instalacijom pomoću alata \textit{pip} te uključivanjem u programski kod.
 
-U Flask okruženju se resursi prikazuju kao klase kojima se pridjeljuje kraj putanje URL-a. 
-To se postiže tako da se doda resurs navodeći odgovarajuću klasu te definicijom krajnje točke:
+U Flask okruženju resursi se prikazuju kao klase kojima se pridjeljuje kraj putanje URL-a. 
+To se postiže dodavanjem resursa navodeći odgovarajuću klasu te definicijom krajnje točke:
 \begin{lstlisting}
  api.add_resource(Devices, "/devices")
 \end{lstlisting}
 
-Unutar klase se navode metode imena \textit{get, put, post} i \textit{delete} koje odgovaraju HTTP zahtjevima koji mogu biti poslani.
-Svaka metoda implementira odgovarajuče akcije za tu klasu.
+Unutar klase navode se metode imena \textit{get, put, post} i \textit{delete} koje odgovaraju HTTP zahtjevima koji mogu biti poslani.
+Svaka metoda implementira odgovarajuće akcije za tu klasu.
 
 Aplikacija se pokreće u \textit{main} programskom odsječku pozivom \textit{run()} metode.
 \begin{lstlisting}
@@ -816,7 +816,7 @@ if __name__ == "__main__":
     app.run(port=5000)
 \end{lstlisting}
 
-Get metoda implementira spajanje na bazu podataka, izvršavanje SQL upita te vraća JSON prikaz cijele baze podataka.
+Get metoda implementira spajanje na bazu podataka, izvršavanje SQL upita te vraćanje JSON prikaza cijele baze podataka.
 % }}}
 
 \chapter{Zaključak}
